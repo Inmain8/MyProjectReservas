@@ -45,7 +45,8 @@
                         class="table-dark"
                         ng-if="misReservasDatos[misreservas.id] == true">
                         <td>[[ misreservas.nombre ]] [[ misreservas.apellidos ]]</td>
-                        <td ng-if="formMisReservas.idreserva != null">[[ misreservas.voucher ]]</td>
+                        <td ng-if="formMisReservas.idreserva != null">
+                            <strong>Voucher:</strong>[[ misreservas.voucher ]]</td>
                         <td><strong>E-mail:</strong> [[ misreservas.email ]]</td>
                         <td><strong>Telef:</strong> [[ misreservas.telefono ]]</td>
                         <td><strong>Ad</strong> [[ misreservas.numAdultos ]]</td>
