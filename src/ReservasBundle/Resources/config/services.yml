@@ -3,6 +3,3 @@ services:
 #        class: ReservasBundle\Example
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
 # Servicios de ReservasBundle Privados
-    reservas.reservas:
-        class: ReservasBundle\Services\ReservasManager
-        arguments: [@doctrine.orm.entity_manager, @service_container]

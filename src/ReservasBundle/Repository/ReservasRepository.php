@@ -45,6 +45,13 @@ class ReservasRepository extends \Doctrine\ORM\EntityRepository
         $reserva->setNumNinos((int)$numninos);
         $reserva->setNumBebes((int)$numbebes);
         $reserva->setVoucher(strtoupper($voucher));
+        if (new \DateTime($llegada) < new \DateTime()) {
+            if (new \DateTime($salida) < new \DateTime()) {
+                $reserva->setEstado('CHECK-OUT');
+            } else {
+                $reserva->setEstado('CHECK-IN');
+            }
+        }
 
         return $reserva;
     }
