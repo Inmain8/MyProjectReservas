@@ -1,0 +1,3 @@
+reservas_homepage:
+    path:     /reservas
+    defaults: { _controller: ReservasBundle:Default:index }

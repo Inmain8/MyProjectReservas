@@ -1,0 +1,22 @@
+ ----------------------------------------- -------- -------- ------ ------------------------------------------------ 
+  Name                                      Method   Scheme   Host   Path                                            
+ ----------------------------------------- -------- -------- ------ ------------------------------------------------ 
+  _wdt                                      ANY      ANY      ANY    /_wdt/{token}                                   
+  _profiler_home                            ANY      ANY      ANY    /_profiler/                                     
+  _profiler_search                          ANY      ANY      ANY    /_profiler/search                               
+  _profiler_search_bar                      ANY      ANY      ANY    /_profiler/search_bar                           
+  _profiler_phpinfo                         ANY      ANY      ANY    /_profiler/phpinfo                              
+  _profiler_search_results                  ANY      ANY      ANY    /_profiler/{token}/search/results               
+  _profiler_open_file                       ANY      ANY      ANY    /_profiler/open                                 
+  _profiler                                 ANY      ANY      ANY    /_profiler/{token}                              
+  _profiler_router                          ANY      ANY      ANY    /_profiler/{token}/router                       
+  _profiler_exception                       ANY      ANY      ANY    /_profiler/{token}/exception                    
+  _profiler_exception_css                   ANY      ANY      ANY    /_profiler/{token}/exception.css                
+  _twig_error_test                          ANY      ANY      ANY    /_error/{code}.{_format}                        
+                                            ANY      ANY      ANY    /reservas/                                      
+  reservas_default_postfinddisponibilidad   ANY      ANY      ANY    /reservas/disponibilidad                        
+  homepage                                  ANY      ANY      ANY    /                                               
+  fos_js_routing_js                         GET      ANY      ANY    /js/routing.{_format}                           
+  post_find_disponibilidad                  POST     ANY      ANY    /rest/reservas/finds/disponibilidads.{_format}  
+ ----------------------------------------- -------- -------- ------ ------------------------------------------------ 
+

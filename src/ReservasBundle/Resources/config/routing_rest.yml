@@ -1,0 +1,3 @@
+reservas.api.reservas:
+    resource: "@ReservasBundle/Api/ReservasRestController.php"
+    type: rest

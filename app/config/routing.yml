@@ -1,0 +1,17 @@
+reservas:
+    resource: "@ReservasBundle/Controller/"
+    type: annotation
+    prefix:   /
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+routing_rest:
+    prefix: /rest
+    resource: routing_rest.yml
+    requirements:
+      _locale: "[a-zA-Z]{2}"

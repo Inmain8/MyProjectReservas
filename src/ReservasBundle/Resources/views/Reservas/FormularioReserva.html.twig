@@ -1,0 +1,80 @@
+<div class="card">
+    <div class="card-header">
+        <div class="text-success">Datos de Reserva</div>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <strong>[[ formDisponibilidad.llegada | date: 'dd/MM/yyyy' ]] - [[ formDisponibilidad.salida | date: 'dd/MM/yyyy' ]]</strong>
+            <strong class="float-right">Habitación : [[ formDatosReserva.tipoHabitacion ]] - Pensión : [[ formDatosReserva.tipoPension ]] - Precio : [[ formDatosReserva.precio ]] €</strong>
+        </div>
+        <form>
+            <div class="form-row">
+                <div class="col-md-5">
+                    <label>Nombre</label>
+                    <input type="text"
+                           class="form-control"
+                           ng-class="{'is-invalid': datosReserva.nombre == true, 'is-valid': datosReserva.nombre == false}"
+                           ng-model="formDatosReserva.nombre"
+                           required>
+                </div>
+                <div class="col-md-6">
+                    <label>Apellidos</label>
+                    <input type="text"
+                           class="form-control"
+                           ng-class="{'is-invalid': datosReserva.apellidos == true, 'is-valid': datosReserva.apellidos == false}"
+                           ng-model="formDatosReserva.apellidos"
+                           required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6">
+                    <label>E-Mail</label>
+                    <input type="text"
+                           class="form-control"
+                           ng-class="{'is-invalid': datosReserva.email == true && datosReserva.telefono == true, 'is-valid': datosReserva.email == false}"
+                           ng-model="formDatosReserva.email">
+                </div>
+                <div class="col-md-6">
+                    <label>Teléfono</label>
+                    <input type="text"
+                           class="form-control"
+                           ng-class="{'is-invalid': datosReserva.telefono == true && datosReserva.email == true, 'is-valid': datosReserva.telefono == false}"
+                           ng-model="formDatosReserva.telefono">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-3">
+                    <label>Adultos</label>
+                    <input type="number"
+                           class="form-control"
+                           ng-class="{'is-invalid': datosReserva.numAdultos == true, 'is-valid': datosReserva.numAdultos == false}"
+                           ng-model="formDatosReserva.numAdultos"
+                           value="2">
+                </div>
+                <div class="col-md-3">
+                    <label>Niños</label>
+                    <input type="number"
+                           class="form-control"
+                           ng-model="formDatosReserva.numNinos">
+                </div>
+                <div class="col-md-3">
+                    <label>Bebes</label>
+                    <input type="number"
+                           class="form-control"
+                           ng-model="formDatosReserva.numBebes">
+                </div>
+            </div>
+            <div ng-if="datosReserva.errorDatos == true"
+                 class="alert alert-danger">
+                <h3>[[ datosReserva.mensajeAlert ]]</h3>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+        <button type="submit"
+                class="btn btn-primary"
+                ng-click="ConfirmarReserva()">Confirmar Reserva</button>
+        <button class="btn btn-secondary"
+                ng-click="VolverFormDisponibilidad()">Volver</button>
+    </div>
+</div>
