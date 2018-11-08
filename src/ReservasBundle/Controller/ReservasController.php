@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 /**
- * Class DefaultController
+ * Class ReservasController
  * @package ReservasBundle\Controller
  *
  * @Route("/reservas")
  */
-class DefaultController extends Controller
+class ReservasController extends Controller
 {
     protected $numHabitaciones = 10;
 
