@@ -81,7 +81,7 @@ app.controller('myCtrl', function($scope, $http) {
             })
             .error(function (data) {
                 $scope.datosReserva.precio          = true;
-                $scope.datosReserva.mensajeAlert    = 'No se han podido cargar los precios';
+                $scope.datosReserva.mensajeAlert    = 'No se han podido cargar los precios.';
             });
     };
 
@@ -120,8 +120,8 @@ app.controller('myCtrl', function($scope, $http) {
         angular.forEach($scope.preciosHabitaciones, function (value) {
             if (value.tipoHabitacion == $scope.formDatosReserva.tipoHabitacion) {
                 var milisegundosxdia    = 1000 * 60 * 60 * 24;
-                var numdias = $scope.formDisponibilidad.salida - $scope.formDisponibilidad.llegada;
-                numdias     = numdias / milisegundosxdia;
+                var numdias             = $scope.formDisponibilidad.salida - $scope.formDisponibilidad.llegada;
+                numdias                 = numdias / milisegundosxdia;
                 $scope.formDatosReserva.precio  = angular.copy(value.precioxdia);
                 $scope.formDatosReserva.precio  = $scope.formDatosReserva.precio * numdias;
             }
@@ -162,11 +162,14 @@ app.controller('myCtrl', function($scope, $http) {
                     $scope.formMisReservas.voucher      = null;
                     $scope.formMisReservas.apellido     = null;
                     $scope.mensajeReservaCreada         = 'Reserva Creada con Éxito !!!';
-                    $scope.BuscarMisReservas();
+                    $scope.BuscarMisReservas(data.datos.misreservas);
                 })
                 .error(function (data) {
                     console.log('error');
                     console.log(data);
+                    $scope.mensajeReservaCreada     = '';
+                    $scope.errorMisReservas         = true;
+                    $scope.textoErrorMisReservas    = 'Ha habido un erro al crear la reserva. Por favor, inténtelo de nuevo.';
                 });
         }
 
@@ -181,17 +184,20 @@ app.controller('myCtrl', function($scope, $http) {
         $scope.mostrarFormReserva   = false;
     };
 
-    $scope.BuscarMisReservas        = function () {
+    $scope.BuscarMisReservas        = function (misreservas) {
         var verificarcampos = true;
 
         if ($scope.formMisReservas.idreserva != null) {
             verificarcampos = true;
         } else if ($scope.formMisReservas.voucher != null && $scope.formMisReservas.apellido != null) {
-            verificarcampos = true;
+            verificarcampos             = true;
+            $scope.mensajeReservaCreada = '';
         } else if ($scope.formMisReservas.nombre != null && $scope.formMisReservas.apellido != null &&$scope.formMisReservas.email != null) {
-            verificarcampos = true;
+            verificarcampos             = true;
+            $scope.mensajeReservaCreada = '';
         } else {
-            verificarcampos = false;
+            verificarcampos             = false;
+            $scope.mensajeReservaCreada = '';
         }
 
         if (verificarcampos == true) {
@@ -207,13 +213,23 @@ app.controller('myCtrl', function($scope, $http) {
                     $scope.mostrarFormDispo     = false;
                     $scope.mostrarFormReserva   = false;
                     $scope.camposMisReservas    = false;
+                    if (misreservas != null ) {
+                        angular.forEach(misreservas, function (reserva) {
+                            $scope.resultMisReservas.push(reserva);
+                            angular.forEach(reserva, function (value) {
+                                $scope.misReservasDatos[value.id]   = false;
+                                $scope.textoBotonInfo[value.id]     = '+';
+                            });
+                        });
+                    }
                     initFormDatosReserva();
                     initFormDisponibilidad();
                 })
                 .error(function (data) {
                     console.log('error');
                     console.log(data);
-                    $scope.errorMisReservas   = true;
+                    $scope.errorMisReservas         = true;
+                    $scope.textoErrorMisReservas    = 'Ha habido un error en la búsqueda de las reservas. Por favor, compruebe los datos';
                 });
         } else {
             $scope.camposMisReservas = true;

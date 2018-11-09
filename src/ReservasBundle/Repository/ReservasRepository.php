@@ -11,6 +11,13 @@ use ReservasBundle\Entity\Reservas;
  */
 class ReservasRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Función para buscar disponibilidad según fechas
+     *
+     * @param $fechallegada
+     * @param $fechasalida
+     * @return array
+     */
     public function findDisponibilidad($fechallegada, $fechasalida) {
 
         $em     = $this->getEntityManager();
@@ -29,9 +36,29 @@ class ReservasRepository extends \Doctrine\ORM\EntityRepository
         return $result;
     }
 
-    public function createReserva(Reservas $reserva, $llegada, $salida, $tipohab, $tipopens,
+    /**
+     * Función que se encarga de crear una reserva
+     *
+     * @param $llegada
+     * @param $salida
+     * @param $tipohab
+     * @param $tipopens
+     * @param $precio
+     * @param $nombre
+     * @param $apellidos
+     * @param $email
+     * @param $telefono
+     * @param $numadultos
+     * @param $numninos
+     * @param $numbebes
+     * @param $voucher
+     * @return null|Reservas
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function createReserva($llegada, $salida, $tipohab, $tipopens,
                                   $precio, $nombre, $apellidos, $email,
                                   $telefono, $numadultos, $numninos, $numbebes, $voucher) {
+        $reserva    = new Reservas();
         $reserva->setLlegada(new \DateTime($llegada));
         $reserva->setSalida(new \DateTime($salida));
         $reserva->setTipoHabitacion(strtoupper($tipohab));
@@ -53,11 +80,28 @@ class ReservasRepository extends \Doctrine\ORM\EntityRepository
             }
         }
 
-        return $reserva;
+        $em         = $this->getEntityManager();
+        $em->persist($reserva);
+
+        if (!$em->flush()) {
+            return $reserva;
+        } else {
+            return null;
+        }
     }
 
-    public function finMisReservas($nombre = null, $apellidos = null, $email = null,
-                                   $telefono = null, $voucher = null, $idreserva = null) {
+    /**
+     * Función que realiza la búsqueda de las reservas del usuario
+     *
+     * @param null $nombre
+     * @param null $apellidos
+     * @param null $email
+     * @param null $voucher
+     * @param null $idreserva
+     * @return array
+     */
+    public function findMisReservas($nombre = null, $apellidos = null, $email = null,
+                                    $voucher = null, $idreserva = null) {
         $em     = $this->getEntityManager();
 
         $query = $em->createQueryBuilder()
@@ -76,51 +120,43 @@ class ReservasRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('res.numNinos')
             ->addSelect('res.numBebes')
             ->addSelect('res.voucher')
-            ->from('ReservasBundle:Reservas','res')
-            ->where('1=1');
+            ->from('ReservasBundle:Reservas','res');
 
-        if (!is_null($voucher) && $voucher != '') {
-            $query->andWhere('res.voucher = :voucher');
-        }
-        if (!is_null($nombre) && $nombre != '') {
-            $query->andWhere('res.nombre = :nombre');
-        }
-        if (!is_null($apellidos) && $apellidos != '') {
-            $query->andWhere('res.apellidos = :apellidos');
-        }
-        if (!is_null($email) && $email != '') {
-            $query->andWhere('res.email = :email');
-        }
         if (!is_null($idreserva) && $idreserva != '') {
-            $query->andWhere('res.id = :idreserva');
-        }
-        if (!is_null($voucher) && $voucher != '') {
-            $query->setParameter('voucher', strtoupper($voucher));
-        }
-        if (!is_null($nombre) && $nombre != '') {
-            $query->setParameter('nombre', strtoupper($nombre));
-        }
-        if (!is_null($apellidos) && $apellidos != '') {
-            $query->setParameter('apellidos', strtoupper($apellidos));
-        }
-        if (!is_null($email) && $email != '') {
-            $query->setParameter('email', strtolower($email));
-        }
-        if (!is_null($idreserva) && $idreserva != '') {
+            $query->where('res.id = :idreserva');
             $query->setParameter('idreserva', $idreserva);
+        } else {
+            if (!is_null($voucher) && $voucher != '' && !is_null($apellidos) && $apellidos != '') {
+                $query->where('res.voucher = :voucher');
+                $query->andWhere('res.apellidos = :apellidos');
+                $query->setParameter('voucher', strtoupper($voucher));
+                $query->setParameter('apellidos', strtoupper($apellidos));
+            } else {
+                if (!is_null($nombre) && $nombre != '' && !is_null($apellidos) && $apellidos != '' && !is_null($email) && $email != '') {
+                    $query->where('res.nombre = :nombre');
+                    $query->andWhere('res.apellidos = :apellidos');
+                    $query->andWhere('res.email = :email');
+                    if (!is_null($voucher) && $voucher != '') {
+                        $query->andWhere('res.voucher = :voucher');
+                        $query->setParameter('voucher', strtoupper($voucher));
+                    }
+                    $query->setParameter('nombre', strtoupper($nombre));
+                    $query->setParameter('apellidos', strtoupper($apellidos));
+                    $query->setParameter('email', strtolower($email));
+                }
+            }
         }
-//        if ($email) {
-//            $query->andWhere('res.email = :email');
-//        }
-//        if ($telefono) {
-//            $query->andWhere('res.telefono = :telefono');
-//        }
 
         $result = $query->getQuery()->getArrayResult();
 
         return $result;
     }
 
+    /**
+     * Función para calcular el voucher aleatorio, controlando no repetir sicho voucher
+     *
+     * @return string
+     */
     public function crearCodigo() {
         $codigo     = md5(microtime());
         $em         = $this->getEntityManager();

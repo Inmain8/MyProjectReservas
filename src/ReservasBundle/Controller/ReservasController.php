@@ -2,9 +2,7 @@
 
 namespace ReservasBundle\Controller;
 
-//use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\FOSRestController as Controller;
-use ReservasBundle\Entity\Reservas;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,15 +36,15 @@ class ReservasController extends Controller
     public function postFindDisponibilidadAction(Request $request)
     {
         try {
-            $data       = $request->get('datos');
-            $llegada    = (isset($data['llegada']))?$data['llegada']:null;
-            $salida     = (isset($data['salida']))?$data['salida']:null;
+            $data           = $request->get('datos');
+            $llegada        = (isset($data['llegada']))?$data['llegada']:null;
+            $salida         = (isset($data['salida']))?$data['salida']:null;
 
             if (is_null($llegada) || is_null($salida)) {
                 throw new \Exception('Los datos no son correctos para la búsqueda');
             }
 
-            $em         = $this->getDoctrine()->getManager();
+            $em             = $this->getDoctrine()->getManager();
 
             $disponibilidad = $em->getRepository('ReservasBundle:Reservas')->findDisponibilidad($llegada, $salida);
 
@@ -58,7 +56,6 @@ class ReservasController extends Controller
             } else {
                 throw new \Exception('No existe disponibilidad para las fechas señaladas');
             }
-
 
         } catch (\Exception $e) {
             $result = array(
@@ -108,20 +105,18 @@ class ReservasController extends Controller
             $numbebes   = (isset($data['numBebes']))?$data['numBebes']:null;
 
             $em             = $this->getDoctrine()->getManager();
-            $misreservsa    =  $em->getRepository('ReservasBundle:Reservas')->finMisReservas($nombre, $apellidos, $email, $telefono);
+            $misreservsa    =  $em->getRepository('ReservasBundle:Reservas')->findMisReservas($nombre, $apellidos, $email, $telefono);
             if (count($misreservsa) > 0) {
                 $voucher    = $misreservsa[0]['voucher'];
             } else {
                 $voucher    =  $em->getRepository('ReservasBundle:Reservas')->crearCodigo();
             }
-            $reserva    = new Reservas();
-            $newreserva = $em->getRepository('ReservasBundle:Reservas')->createReserva($reserva, $llegada, $salida, $tipohab,
+
+            $newreserva = $em->getRepository('ReservasBundle:Reservas')->createReserva($llegada, $salida, $tipohab,
                                                                                                 $tipopens, $precio, $nombre, $apellidos,
                                                                                                 $email, $telefono, $numadultos, $numninos,
                                                                                                 $numbebes, $voucher);
-            $em->persist($newreserva);
-
-            if (!$em->flush()) {
+            if (!is_null($newreserva)) {
                 $result = array(
                     'error' => false,
                     'datos' => array(
@@ -155,11 +150,11 @@ class ReservasController extends Controller
         $idreserva  = (isset($data['idreserva']))?$data['idreserva']:null;
         $voucher    = (isset($data['voucher']))?$data['voucher']:null;
         $apellidos  = (isset($data['apellido']))?$data['apellido']:null;
-        $nombre  = (isset($data['nombre']))?$data['nombre']:null;
-        $email  = (isset($data['email']))?$data['email']:null;
+        $nombre     = (isset($data['nombre']))?$data['nombre']:null;
+        $email      = (isset($data['email']))?$data['email']:null;
 
         $em             = $this->getDoctrine()->getManager();
-        $misreservsa    =  $em->getRepository('ReservasBundle:Reservas')->finMisReservas($nombre, $apellidos, $email, null, $voucher , $idreserva);
+        $misreservsa    =  $em->getRepository('ReservasBundle:Reservas')->findMisReservas($nombre, $apellidos, $email, $voucher , $idreserva);
 
         return new Response(json_encode($misreservsa));
     }
