@@ -4,16 +4,20 @@ namespace ReservasBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+Use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Reservas
  *
  * @ORM\Table(name="reservas")
  * @ORM\Entity(repositoryClass="ReservasBundle\Repository\ReservasRepository")
+ *
+ * @Gedmo\Loggable(logEntryClass="ReservasBundle\Entity\ExtLogReservas")
  */
 class Reservas
 {
     /**
+     * @Gedmo\Versioned
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -23,6 +27,7 @@ class Reservas
     private $id;
 
     /**
+     * @Gedmo\Versioned
      * @var \DateTime
      *
      * @ORM\Column(name="llegada", type="date")
@@ -30,6 +35,7 @@ class Reservas
     private $llegada;
 
     /**
+     * @Gedmo\Versioned
      * @var \DateTime
      *
      * @ORM\Column(name="salida", type="date")
@@ -37,6 +43,7 @@ class Reservas
     private $salida;
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="estado", type="string", length=100)
@@ -44,6 +51,7 @@ class Reservas
     private $estado = 'RESERVA';
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="tipoHabitacion", type="string", length=10)
@@ -51,6 +59,7 @@ class Reservas
     private $tipoHabitacion;
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="tipoPension", type="string", length=10)
@@ -58,6 +67,7 @@ class Reservas
     private $tipoPension;
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
@@ -65,6 +75,7 @@ class Reservas
     private $nombre;
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="apellidos", type="string", length=255)
@@ -72,6 +83,7 @@ class Reservas
     private $apellidos;
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="voucher", type="string", length=255)
@@ -79,6 +91,7 @@ class Reservas
     private $voucher;
 
     /**
+     * @Gedmo\Versioned
      * @var int
      *
      * @ORM\Column(name="precio", type="integer")
@@ -86,22 +99,23 @@ class Reservas
     private $precio;
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
-     * @Assert\IsNull()
      */
     private $email;
 
     /**
+     * @Gedmo\Versioned
      * @var string
      *
      * @ORM\Column(name="telefono", type="string", length=255)
-     * @Assert\IsNull()
      */
     private $telefono;
 
     /**
+     * @Gedmo\Versioned
      * @var int
      *
      * @ORM\Column(name="numAdultos", type="integer")
@@ -109,6 +123,7 @@ class Reservas
     private $numAdultos;
 
     /**
+     * @Gedmo\Versioned
      * @var int
      *
      * @ORM\Column(name="numNinos", type="integer")
@@ -116,6 +131,7 @@ class Reservas
     private $numNinos = 0;
 
     /**
+     * @Gedmo\Versioned
      * @var int
      *
      * @ORM\Column(name="numBebes", type="integer")
